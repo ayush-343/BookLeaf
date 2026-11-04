@@ -1,0 +1,15 @@
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+.env*
+!.env.example
+.impeccable/mocks/
+*.tsbuildinfo
+next-env.d.ts
+.sloplint/
+.impeccable/review/
+.hallmark/shots/
+
+/data/books.json
