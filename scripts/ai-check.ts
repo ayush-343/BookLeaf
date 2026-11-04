@@ -26,6 +26,12 @@ try {
   assert.deepEqual(classification.output,output);
   output = {reply:"I can help check this. We’ll verify the payout record.",sources:["royalty"],missing:["Bank status"]};
   assert.deepEqual((await generate("draft",{description:"When is my royalty due?"},"Royalty & Payments")).output,output);
+  output = {reply:"Your balance qualifies for the upcoming payout.",sources:["royalty"],missing:["Quarter"]};
+  const payout = (await generate("draft",{description:"Royalty due?"},"Royalty & Payments")).output;
+  assert.ok("reply" in payout && payout.reply.includes("cannot establish payout timing"));
+  output = {reply:"The listing will be restored within 24–48 hours.",sources:["distribution"],missing:[]};
+  const listing = (await generate("draft",{description:"Amazon listing unavailable"},"Distribution & Availability")).output;
+  assert.ok("reply" in listing && listing.reply.includes("additional time"));
   output = {reply:"Invalid citation",sources:["isbn"],missing:[]};
   await assert.rejects(generate("draft",{description:"Royalty due?"},"Royalty & Payments"),/Invalid source/);
   output = {category:"invented",priority:"Urgent",rationale:""};
