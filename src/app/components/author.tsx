@@ -235,7 +235,7 @@ function RecentTickets({ go }: { go: Navigate }) {
             onClick={() => go({ ticket: ticket.id })}
           >
             <span className="recent-title">
-              {ticket.subject}
+              <span className="recent-subject">{ticket.subject}</span>
               <Badge>{ticket.status}</Badge>
             </span>
             <small>{ticket.bookTitle ?? "General / Account Level"}</small>
