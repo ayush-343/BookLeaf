@@ -6,7 +6,12 @@
   },
   "servers": [
     {
-      "url": "/api/v1"
+      "url": "https://bookleaf-author-support-ayush-343s-projects.vercel.app/api/v1",
+      "description": "Hosted assessment demo"
+    },
+    {
+      "url": "/api/v1",
+      "description": "Current application origin"
     }
   ],
   "security": [

@@ -2,6 +2,17 @@
 
 Authors can review their books and royalty balances, open support tickets, and follow replies. Staff can triage and assign tickets, add private notes, and review AI suggestions alongside the relevant book facts and policies.
 
+## Hosted assessment demo
+
+[Open BookLeaf](https://bookleaf-author-support-ayush-343s-projects.vercel.app) · [Public source](https://github.com/ayush-343/BookLeaf)
+
+| Role | Email | Demo password |
+|---|---|---|
+| Author | `priya.sharma@email.com` | `2nzcM2bg3IPh-6iPMrH---Uu` |
+| Staff | `admin1@bookleaf.example` | `2nzcM2bg3IPh-6iPMrH---Uu` |
+
+The dedicated hosted database contains the assessment’s exact 10 authors and 18 books. These are shared demo accounts; use synthetic ticket text during review. AI suggestions require staff review before sending. The original JSON remains outside the public repository. Hosting and the limited OpenRouter transfer were authorized for this assessment.
+
 ## Run locally
 
 1. Install Node.js 22 or later and create a PostgreSQL database.
@@ -34,7 +45,7 @@ Business endpoints use `/api/v1`. Login and logout use Better Auth's `/api/auth/
 |---|---|
 | GET /me | Signed-in profile name and role |
 | GET /books, /books/:id | Owned book(s), or staff access with optional authorId filter |
-| GET /tickets | Owned list or staff queue. Filters: status, category, priority, from, to, page |
+| GET /tickets | Owned list or staff queue. Filters: status, category, priority, search, assignment, from, to, page |
 | POST /tickets | Author. subject, description, nullable bookId, UUID operationId |
 | GET /tickets/:id | Role-specific conversation and book context. Staff also receive activity history. |
 | PATCH /tickets/:id | Staff. version plus status, category, priority, or assignToMe |
@@ -53,7 +64,7 @@ Drafts are cached by ticket and context fingerprint. Staff can recover from a st
 
 ## Deployment
 
-Deploy to Vercel with a dedicated Neon database. Configure the environment from the template, point `BETTER_AUTH_URL` at the deployed origin, and migrate and seed before inviting reviewers. Use an isolated demo-only password and add the published URL and reviewer credentials when the deployment is available. The public source uses synthetic fixtures. Import the supplied dataset only after hosted exposure is approved. For a production rollout, use private account provisioning, durable AI jobs, and a retention policy for ticket data.
+Deploy to Vercel with a dedicated Neon database. Configure the environment from the template, point `BETTER_AUTH_URL` at the deployed origin, and migrate and seed before inviting reviewers. Reviewer access is listed above. The application uses a pooled Neon connection; migrations use a direct connection. The public source uses synthetic fixtures. The supplied dataset was imported into the dedicated hosted database after approval. For a production rollout, use private account provisioning, durable AI jobs, and a retention policy for ticket data.
 
 ## Scope
 
@@ -82,3 +93,9 @@ BOOKLEAF_SEED_FILE="/absolute/path/to/supplied-data.json" LOCAL_DEMO_PORT=3310 n
 ```
 
 This preview imports the exact supplied identities and books, preserves the database under the ignored `.local/assessment-db` directory between launches, and prints the demo password. Sign in with an author email from the supplied file or `admin1@bookleaf.example`. AI for imported records requires explicit sharing authorization and `BOOKLEAF_ALLOW_IMPORTED_AI=1` together with `BOOKLEAF_DEMO_AI=1`.
+
+## Hosted verification
+
+The hosted release was checked against all supplied identities and complete book records. Both role logins, ownership boundaries, private staff notes, live OpenRouter classification, policy-referenced drafting, edited-draft sending, stale-draft rejection, manual replies, and concurrent update protection passed. Browser verification covers the author and staff workflow at 1440, 1280, 768, and 390 pixels, public reply polling, and session invalidation.
+
+Deployments currently use Vercel’s file API from the published commit. Automatic Git deployments require granting the Vercel GitHub application access to this repository. The assessment collaborator can be added when the hiring team provides its address.
