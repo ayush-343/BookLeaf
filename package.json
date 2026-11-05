@@ -13,7 +13,8 @@
     "test": "node scripts/local-check.mjs",
     "test:ai": "node --import tsx scripts/ai-check.ts",
     "demo": "node scripts/local-check.mjs --serve",
-    "eval:ai": "node --env-file-if-exists=.env.local --import tsx scripts/eval-ai.ts"
+    "eval:ai": "node --env-file-if-exists=.env.local --import tsx scripts/eval-ai.ts",
+    "demo:assessment": "node scripts/local-check.mjs --serve --assessment"
   },
   "keywords": [],
   "author": "",

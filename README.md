@@ -72,3 +72,13 @@ Run `npm run test:ai` for mocked adapter checks and `npm run eval:ai` for the si
 The author dashboard computes royalty and sales totals from owned books, links recent support conversations, and offers topic-specific intake guidance. The staff inbox keeps the queue, conversation, AI-assisted composer, and evidence together. On smaller screens, evidence moves into a keyboard-accessible native dialog. Search, assignment, status, priority, category, date, selected ticket, and context-tab state live in the URL.
 
 The staff ticket response includes the recorded AI triage rationale and manual override flags. Sources show the policy text used by the selected draft. Missing-information checkboxes are local review aids and do not change book facts.
+
+## Assessment dataset preview
+
+The supplied assessment JSON is kept outside version control. Use a separate persistent local database for these records:
+
+```sh
+BOOKLEAF_SEED_FILE="/absolute/path/to/supplied-data.json" LOCAL_DEMO_PORT=3310 npm run demo:assessment
+```
+
+This preview imports the exact supplied identities and books, preserves the database under the ignored `.local/assessment-db` directory between launches, and prints the demo password. Sign in with an author email from the supplied file or `admin1@bookleaf.example`. AI for imported records requires explicit sharing authorization and `BOOKLEAF_ALLOW_IMPORTED_AI=1` together with `BOOKLEAF_DEMO_AI=1`.

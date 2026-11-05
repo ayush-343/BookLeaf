@@ -1,15 +1,26 @@
 import EmbeddedPostgres from "embedded-postgres";
 import { spawn } from "node:child_process";
-import { mkdtemp, rm } from "node:fs/promises";
+import { access, mkdtemp, mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 const port = Number(process.env.LOCAL_DEMO_PORT ?? 3300);
 const pgPort = 55432 + port - 3300;
 const origin = "http://127.0.0.1:"+port;
-const dir = await mkdtemp(join(tmpdir(),"bookleaf-pg-"));
-const pg = new EmbeddedPostgres({databaseDir:dir,user:"postgres",password:"local-check-password",port:pgPort,persistent:false,autoRehydrateSymlinks:true,onLog:()=>{}});
+const assessment = process.argv.includes("--assessment");
+if (assessment && (!process.argv.includes("--serve") || !process.env.BOOKLEAF_SEED_FILE)) {
+  throw new Error("Assessment mode requires --serve and BOOKLEAF_SEED_FILE.");
+}
+const dir = assessment ? resolve(".local/assessment-db") : await mkdtemp(join(tmpdir(),"bookleaf-pg-"));
+if (assessment) await mkdir(dir,{recursive:true});
+let initialized = false;
+try { await access(join(dir,"PG_VERSION")); initialized = true; } catch {}
+const pg = new EmbeddedPostgres({databaseDir:dir,user:"postgres",password:"local-check-password",port:pgPort,persistent:assessment,autoRehydrateSymlinks:true,onLog:()=>{}});
 const env = {...process.env,DATABASE_URL:"postgres://postgres:local-check-password@127.0.0.1:"+pgPort+"/postgres",BETTER_AUTH_SECRET:"disposable-local-check-secret-only",BETTER_AUTH_URL:origin,SMOKE_ORIGIN:origin,DEMO_PASSWORD:"local-demo-check-password",OPENROUTER_API_KEY:"",BOOKLEAF_SEED_FILE:"",BOOKLEAF_ALLOW_IMPORTED_AI:""};
+if (assessment) {
+  env.BOOKLEAF_SEED_FILE = process.env.BOOKLEAF_SEED_FILE;
+  env.BOOKLEAF_ALLOW_IMPORTED_AI = process.env.BOOKLEAF_ALLOW_IMPORTED_AI ?? "0";
+}
 const liveCheck = process.argv.includes("--live-ai");
 if (liveCheck || (process.argv.includes("--serve") && process.env.BOOKLEAF_DEMO_AI === "1")) {
   if (process.env.OPENROUTER_API_KEY) env.OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -23,7 +34,7 @@ const run = (command,args) => new Promise((resolve,reject)=>{
 });
 let next;
 try {
-  await pg.initialise();
+  if (!initialized) await pg.initialise();
   await pg.start();
   await run("npm",["run","db:migrate"]);
   await run("npm",["run","db:seed"]);
@@ -35,7 +46,7 @@ try {
   }
   if (process.argv.includes("--serve")) {
     console.log("Demo:",env.SMOKE_ORIGIN);
-    console.log("Author: author1@bookleaf.example | Staff: admin1@bookleaf.example");
+    console.log(assessment ? "Author: use an email from the supplied fixture | Staff: admin1@bookleaf.example" : "Author: author1@bookleaf.example | Staff: admin1@bookleaf.example");
     console.log("Demo password:",env.DEMO_PASSWORD);
     await new Promise(resolve=>{
       process.once("SIGINT",resolve);
@@ -53,5 +64,5 @@ try {
 } finally {
   if(next) next.kill();
   await pg.stop().catch(()=>{});
-  await rm(dir,{recursive:true,force:true});
+  if (!assessment) await rm(dir,{recursive:true,force:true});
 }

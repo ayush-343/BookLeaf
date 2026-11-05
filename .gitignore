@@ -13,3 +13,5 @@ next-env.d.ts
 .hallmark/shots/
 
 /data/books.json
+
+.local/
