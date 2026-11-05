@@ -76,8 +76,11 @@ export async function generate(kind:"classify"|"draft", input:unknown, category?
   if (choice?.finish_reason !== "stop" || choice.message.refusal) throw new Error("AI unavailable");
   const output = schema.parse(JSON.parse(choice.message.content));
   if ("sources" in output && output.sources.some(key=>!(key in relevant))) throw new Error("Invalid source");
+  if ("sources" in output && output.sources.includes("royalty")) {
+    output.missing = [...new Set([...output.missing, "Quarter of the pending balance", "Transfer status for this balance"])];
+  }
   if ("sources" in output && output.sources.includes("royalty") &&
-      /(?:qualif(?:y|ies)|eligib(?:le|ility)|should be scheduled|will be paid (?:within|by|on|in))/i.test(output.reply)) {
+      /(?:qualif(?:y|ies)|eligib(?:le|ility)|should be scheduled|current quarter|upcoming (?:payment|payout) cycle|(?:will|should) be (?:paid|processed|scheduled))/i.test(output.reply)) {
     output.reply = "Thank you for flagging your pending royalties. Royalties are calculated quarterly and paid within 45 days of quarter end. Balances below ₹1,000 roll over. The balance alone cannot establish payout timing. Our next step is to check which quarter the balance belongs to and whether a transfer is scheduled.";
   }
   if ("sources" in output && output.sources.includes("distribution") &&

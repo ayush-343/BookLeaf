@@ -1,0 +1,25 @@
+{
+  "name": "BookLeaf support",
+  "fonts": {
+    "body": "Lato",
+    "heading": "Lato"
+  },
+  "colors": {
+    "paper": "#fff8f9",
+    "surface": "#fffdfd",
+    "ink": "#2f2e2e",
+    "muted": "#63595c",
+    "accent": "#a93248",
+    "brandCoral": "#f16876",
+    "active": "#fce8ed"
+  },
+  "radii": {
+    "panel": "12px",
+    "control": "9px"
+  },
+  "breakpoints": {
+    "contextDrawer": "1279px",
+    "mobileInbox": "800px",
+    "compact": "600px"
+  }
+}

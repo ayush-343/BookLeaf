@@ -99,7 +99,7 @@
         "summary": "List owned tickets or filter the staff queue",
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Paginated items and hasMore. Items include bookTitle and latestMessage (body, senderName, createdAt). Staff items also include authorName and effective category/priority."
           },
           "default": {
             "description": "Error response",
@@ -154,6 +154,27 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Staff search in ticket subject and original query. Maximum 150 characters.",
+            "schema": {
+              "type": "string",
+              "maxLength": 150
+            }
+          },
+          {
+            "name": "assignment",
+            "in": "query",
+            "description": "Staff assignment filter.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "mine",
+                "unassigned"
+              ]
+            }
           }
         ]
       },
@@ -191,7 +212,7 @@
         "summary": "Read the role-specific ticket conversation",
         "responses": {
           "200": {
-            "description": "Role-specific conversation. Staff receive activity events with actor, field, before, after and createdAt."
+            "description": "Owned public conversation. Staff also receive notes, activity, policies, and triage (state, suggested category, suggested priority, rationale, manualOverride flags)."
           },
           "default": {
             "description": "Error response",

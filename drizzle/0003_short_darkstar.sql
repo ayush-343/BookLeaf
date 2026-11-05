@@ -1,0 +1,1 @@
+ALTER TABLE "ai_runs" ADD COLUMN "state" text DEFAULT 'pending' NOT NULL;

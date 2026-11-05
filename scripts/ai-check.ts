@@ -25,8 +25,10 @@ try {
   const classification = await generate("classify",{description:"No royalty for six months."});
   assert.deepEqual(classification.output,output);
   output = {reply:"I can help check this. We’ll verify the payout record.",sources:["royalty"],missing:["Bank status"]};
-  assert.deepEqual((await generate("draft",{description:"When is my royalty due?"},"Royalty & Payments")).output,output);
-  output = {reply:"Your balance qualifies for the upcoming payout.",sources:["royalty"],missing:["Quarter"]};
+  const royalty = (await generate("draft",{description:"When is my royalty due?"},"Royalty & Payments")).output;
+  assert.ok("missing" in royalty && royalty.missing.includes("Quarter of the pending balance"));
+  assert.ok("missing" in royalty && royalty.missing.includes("Transfer status for this balance"));
+  output = {reply:"Your payment will be processed after the current quarter.",sources:["royalty"],missing:["Quarter"]};
   const payout = (await generate("draft",{description:"Royalty due?"},"Royalty & Payments")).output;
   assert.ok("reply" in payout && payout.reply.includes("cannot establish payout timing"));
   output = {reply:"The listing will be restored within 24–48 hours.",sources:["distribution"],missing:[]};

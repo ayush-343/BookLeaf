@@ -66,3 +66,9 @@ Run `npm run typecheck`, then `npm run build` and `npm test`. The integration te
 For a self-contained local preview, run `npm run build && npm run demo`. It creates a temporary database, prints demo credentials, and serves the portal at http://127.0.0.1:3300 until stopped. This preview uses manual reply mode by default. Set `BOOKLEAF_DEMO_AI=1` with a local server-side OpenRouter key to enable AI for the synthetic seed.
 
 Run `npm run test:ai` for mocked adapter checks and `npm run eval:ai` for the six-category synthetic live evaluation. With Chrome installed, set `CHROME_PATH` and run `npm test -- --visual` to check polling and session recovery. Run `npm test -- --live-ai` to exercise a synthetic ticket from classification to an edited staff reply.
+
+## Interface
+
+The author dashboard computes royalty and sales totals from owned books, links recent support conversations, and offers topic-specific intake guidance. The staff inbox keeps the queue, conversation, AI-assisted composer, and evidence together. On smaller screens, evidence moves into a keyboard-accessible native dialog. Search, assignment, status, priority, category, date, selected ticket, and context-tab state live in the URL.
+
+The staff ticket response includes the recorded AI triage rationale and manual override flags. Sources show the policy text used by the selected draft. Missing-information checkboxes are local review aids and do not change book facts.
