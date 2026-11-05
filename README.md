@@ -11,7 +11,17 @@ Authors can review their books and royalty balances, open support tickets, and f
 | Author | `priya.sharma@email.com` | `2nzcM2bg3IPh-6iPMrH---Uu` |
 | Staff | `admin1@bookleaf.example` | `2nzcM2bg3IPh-6iPMrH---Uu` |
 
-The dedicated hosted database contains the assessment’s exact 10 authors and 18 books. These are shared demo accounts; use synthetic ticket text during review. AI suggestions require staff review before sending. The original JSON remains outside the public repository. Hosting and the limited OpenRouter transfer were authorized for this assessment.
+The dedicated hosted database contains the assessment’s exact 10 authors and 18 books. These are shared demo accounts; use synthetic ticket text during review. AI suggestions require staff review before sending. The original assessment JSON is not redistributed in this repository; the seed command supports importing the supplied file.
+
+### Suggested review flow
+
+1. Sign in as the author and inspect book details, publication status, and royalty totals.
+2. Create a synthetic support ticket linked to a book. For example: "My test copy has loose pages. What evidence is needed for a reprint?"
+3. Open a separate browser profile or private window and sign in as staff. Open the new ticket and review the suggested category, priority, and rationale.
+4. Inspect the draft's policy sources and missing facts, use the draft, edit it, and send. Try assignment, internal notes, and status changes; inspect the Activity tab.
+5. Keep the author's ticket open to see the response arrive through polling without a refresh. Internal notes and staff activity remain private.
+
+The one-page engineering write-up is available as [PDF](output/pdf/bookleaf-approach.pdf) and [Markdown](APPROACH.md). The [submission message](SUBMISSION.md) collects the handoff links.
 
 ## Run locally
 
@@ -68,7 +78,7 @@ Deploy to Vercel with a dedicated Neon database. Configure the environment from 
 
 ## Scope
 
-The attachment field previews file selection locally. The portal does not upload files, send email, or contact publishing/payment systems. The support data cannot determine a confirmed payout or publication deadline.
+The attachment field previews file selection locally. The portal does not upload files, send email, or contact publishing/payment systems. The support data cannot determine a confirmed payout or publication deadline. Updates use five-second polling. AI is a reviewed draft, not an automatic reply or an action taken in a publishing system. If the daily AI allowance is exhausted, manual ticket handling remains available. The first request after database suspension can take longer.
 
 ## Verification
 

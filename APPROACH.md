@@ -1,9 +1,25 @@
-# Assessment approach
+# BookLeaf: assessment approach
 
-I prioritized a complete author-to-staff conversation and grounded AI assistance. Authors can see the facts they need without contacting support. Staff can resolve a ticket with the conversation, book data, and relevant policy in one workspace.
+Ayush Srivastava | Author Support & Communication Portal
 
-A single Next.js application keeps deployment and authentication simple while retaining a documented REST interface. PostgreSQL makes ownership and ticket relationships explicit. Polling makes updates visible without operating a separate connection service.
+## What I prioritized
 
-AI is advisory. Tickets are persisted before classification, the draft uses a bounded policy context, and staff review every reply before sending. The sample data provides cumulative royalties. The model cannot verify bank status or infer that a particular payment is overdue.
+I prioritized the complete support loop: an author understands their book and royalties, raises a contextual query, and receives a reviewed staff response without refreshing. The author dashboard emphasizes publishing facts; the staff inbox places the conversation, reply editor, AI suggestions, and evidence together. The hosted demo uses all 10 authors and 18 books from the supplied dataset.
 
-In production, I would move model calls to a durable queue with idempotent jobs, use stronger per-actor abuse controls, and connect verified publishing and payment facts. I would evaluate policy adherence on anonymized queries and track latency, cost, and staff edits before expanding AI use.
+## Architecture and trade-offs
+
+I chose Next.js and TypeScript for a single deployable frontend and REST API, with PostgreSQL and Drizzle for explicit relationships, transactions, and migrations. Better Auth handles sessions; server-side profiles determine roles and every author query is scoped to ownership. Private notes and activity history are staff-only. This keeps the assessment straightforward to run while separating interface components, API handlers, persistence, and AI logic.
+
+Five-second polling meets the near-real-time requirement without a separate connection service. It trades extra requests and a short update delay for simpler deployment. Version checks protect concurrent edits and stale AI drafts; operation IDs make repeated submissions safe. The attachment selector remains UI-only, as permitted by the brief.
+
+## AI as a reviewed support tool
+
+OpenRouter routes requests to GPT-4.1 mini. I chose this model for structured output support and the cost of a bounded classification-and-drafting task. Tickets are saved before classification so AI failure does not lose a query. Staff can override category and priority, inspect policy sources, edit the draft, and send manually when AI is unavailable.
+
+Draft context includes selected policies, relevant book facts, and at most three recent public replies. Contact fields and internal notes are excluded; recognizable personal identifiers in free text are redacted. Structured validation, timeouts, caching, and daily usage limits control failures and cost. Cumulative royalties cannot establish an overdue payment or bank verification; the assistant must identify missing evidence rather than invent it.
+
+## Verification and production evolution
+
+Checks cover ownership boundaries, private data, duplicate requests, concurrent updates, stale drafts, invalid model output, and manual fallback. Hosted browser checks cover both roles, four viewport sizes, reply polling, session recovery, and a synthetic AI-assisted ticket flow.
+
+For production, I would add durable AI jobs with idempotent retries, private account provisioning, monitoring and retention controls, and verified publishing/payment integrations. I would evaluate policy adherence, escalation accuracy, latency, cost, and staff edits before expanding automation.
