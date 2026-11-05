@@ -150,17 +150,10 @@ function Workspace() {
           >
             <BrandLogo />
           </a>
-          <nav aria-label="Portal">
-            {admin ? (
-              <button
-                className="nav"
-                aria-current="page"
-                onClick={() => go({ view: "queue" })}
-              >
-                Support workspace
-              </button>
-            ) : (
-              <>
+          {admin ? (
+            <span className="workspace-title">Support workspace</span>
+          ) : (
+            <nav aria-label="Portal">
                 <button
                   className="nav"
                   aria-current={
@@ -179,9 +172,8 @@ function Workspace() {
                 >
                   My tickets
                 </button>
-              </>
-            )}
-          </nav>
+            </nav>
+          )}
           <div className="identity">
             <span>{person.name}</span>
             <button

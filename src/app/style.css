@@ -801,7 +801,7 @@ dd {
   margin-bottom: 0.5rem;
 }
 .staff-ticket .back-to-list {
-  display: none;
+  display: inline-flex;
 }
 .conversation-scroll {
   padding: 1.25rem;
@@ -1440,4 +1440,16 @@ dd {
 .recent-title .badge {
   white-space: nowrap;
   overflow-wrap: normal;
+}
+
+
+.workspace-title {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .workspace-title {
+    font-size: 0.8rem;
+  }
 }
