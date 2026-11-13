@@ -6,7 +6,7 @@ Bubble provides native login, author and admin pages, ownership-based data acces
 
 Development preview: https://ayushsrivastavamail.bubbleapps.io/version-test/
 
-Review profiles: admin@bookleaf.test, author1@bookleaf.test, author2@bookleaf.test. Passwords must be supplied privately to the evaluator. All three review profiles have completed first-time password setup. Normal password-login verification is still in progress. This is a development preview, not a production deployment.
+Review profiles: admin@bookleaf.test, author1@bookleaf.test, author2@bookleaf.test. Passwords must be supplied privately to the evaluator. Password setup is being corrected: a dashboard return did not prove that the password changed, and AUTH002 ordinary login failed. Setup retry and ordinary password-login verification remain pending. This is a development preview, not a production deployment.
 
 ## Free-plan workaround
 
